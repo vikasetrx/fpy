@@ -35,3 +35,37 @@ class RestMethod(str, Enum):
   DELETE = 'delete'
   OPTION = 'option'
   HEAD = 'head'
+
+class PriceType(str, Enum):
+  """
+  The price type for orders & trades
+  """
+  LIMIT = 'LMT'
+  MARKET = 'MKT'
+  STOP_LOSS_LIMIT = 'SL-LMT'
+  STOP_LOSS_MARKET = 'SL-MKT'
+  DS = 'DS'
+  SECOND_LEG = '2L'
+  THIRD_LEG = '3L'
+
+class TransactionType(str, Enum):
+  """
+  The transaction type for orders & trades
+  """
+  BUY = 'B'
+  SELL = 'S'
+
+class RetentionType(str, Enum):
+  """
+  The retention type for orders
+  """
+  DAY = 'DAY'
+  IOC = 'IOC'
+  EOS = 'EOS'
+
+class AlertValidity(str, Enum):
+  """
+  The alert validity
+  """
+  DAY = 'DAY'
+  GTT = 'GTT'

@@ -1,7 +1,7 @@
 """
 Available json encoders to be used for different datatypes in models
 """
-from datetime import date
+from datetime import date, datetime
 import json
 from hashlib import sha256
 from typing import Any, Callable, Dict, List
@@ -35,6 +35,26 @@ def date_encoder(format: str = '%d-%m-%Y'):
         str: The formatted date
     """
     return value.strftime(format)
+  return encode
+
+def timestamp_encoder():
+  """
+  Create a timestamp encoder
+
+  Returns:
+    Callable[[datetime], str]: The password hash encoder function
+  """
+  def encode(value: datetime) -> str:
+    """
+    Convert a datetime instance to timestamp (seconds since epoch)
+
+    Args:
+        value (date): The date instance to convert to
+
+    Returns:
+        str: The timestamp string
+    """
+    return str(int(value.timestamp()))
   return encode
 
 def password_hash_encoder():

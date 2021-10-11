@@ -29,9 +29,9 @@ class GetQuotesResponseModel(BaseModel):
   stat: ResponseStatus
   """The get scrips success or failure status"""
   request_time: Optional[datetime]
-  """It will be present only on successful logout."""
+  """It will be present only on successful response."""
   emsg: Optional[str]
-  """Error message if the logout failed"""
+  """Error message if the request failed"""
   exch: Optional[str]
   """Exchange"""
   tsym: Optional[str]

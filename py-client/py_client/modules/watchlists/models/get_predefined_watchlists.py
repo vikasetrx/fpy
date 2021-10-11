@@ -9,27 +9,27 @@ from pydantic import BaseModel
 from ....common.enums import ResponseStatus
 from ....utils.decoders import build_loader, datetime_decoder
 
-__all__ = ['GetWatchListNamesRequestModel', 'GetWatchListNamesResponseModel']
+__all__ = ['GetPredefinedWatchListsRequestModel', 'GetPredefinedWatchListsResponseModel']
 
-class GetWatchListNamesRequestModel(BaseModel):
+class GetPredefinedWatchListsRequestModel(BaseModel):
   """
   The request model for get predefined watchlists endpoint
   """
   uid: str
   """The user id of the login user"""
 
-class GetWatchListNamesResponseModel(BaseModel):
+class GetPredefinedWatchListsResponseModel(BaseModel):
   """
   The response model for get predefined watchlists endpoint
   """
   stat: ResponseStatus
   """The get predefined watchlists success or failure status"""
   request_time: Optional[datetime]
-  """It will be present only on successful logout."""
+  """It will be present only on successful response."""
   values: List[str]
   """Watch List names as a json array of strings."""
   emsg: Optional[str]
-  """Error message if the logout failed"""
+  """Error message if the request failed"""
 
   class Config:
     """model configuration"""

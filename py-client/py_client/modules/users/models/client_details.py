@@ -49,14 +49,14 @@ class ClientDetailsResponseModel(BaseModel):
   """City"""
   addrstate: Optional[str]
   """State"""
-  bankdetails: List[BankDetails]
+  bankdetails: Optional[List[BankDetails]]
   """List of bank details"""
-  dp_acct_num: List[DpAccountNumber]
+  dp_acct_num: Optional[List[DpAccountNumber]]
   """List of bank"""
   request_time: Optional[datetime]
-  """It will be present only on successful logout."""
+  """It will be present only on successful response."""
   emsg: Optional[str]
-  """Error message if the logout failed"""
+  """Error message if the request failed"""
 
   class Config:
     """model configuration"""

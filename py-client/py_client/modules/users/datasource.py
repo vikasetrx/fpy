@@ -2,22 +2,12 @@
 The data source for all login/logout and user requests
 """
 
-from ...utils.datasources.rest.context import RestContext
-from ...utils.interceptors.interceptor import Interceptor
-from ...utils import RestDataSource
+from ...utils.datasources import NorenRestDataSource
 from . import endpoints
 
-from .models.login import LoginRequestModel, LoginResponseModel
-from .models.logout import LogoutRequestModel, LogoutResponseModel
-from .models.forgot_password import ForgotPasswordRequestModel, ForgotPasswordResponseModel
-from .models.change_password import ChangePasswordRequestModel, ChangePasswordResponseModel
-from .models.set_device_pin import SetDevicePinRequestModel, SetDevicePinResponseModel
-from .models.get_hs_token import GetHsTokenRequestModel, GetHsTokenResponseModel
-from .models.user_details import UserDetailsRequestModel, UserDetailsResponseModel
-from .models.client_details import ClientDetailsRequestModel, ClientDetailsResponseModel
-from .models.save_fcm_token import SaveFCMTokenRequestModel, SaveFCMTokenResponseModel
+from .models import *
 
-class UserDataSource(RestDataSource):
+class UserDataSource(NorenRestDataSource):
   """
   The data source for all login/logout and user requests.
   """
@@ -45,7 +35,7 @@ class UserDataSource(RestDataSource):
 
   def logout(self, model: LogoutRequestModel, key: str = None) -> LogoutResponseModel:
     """
-    Send a logout request to rest api
+    Logout the user
 
     Args:
       model (LogoutRequestModel): The data to be send as LogoutRequestModel.
@@ -54,18 +44,13 @@ class UserDataSource(RestDataSource):
     Returns:
       LogoutResponseModel: The response from logout request as LogoutResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.LOGOUT, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.LOGOUT, key)
     # convert the request to response model
     return LogoutResponseModel.parse_raw(response_json)
 
   def forgot_password(self, model: ForgotPasswordRequestModel) -> ForgotPasswordResponseModel:
     """
-    Send a forgot password request
+    Send a forgot password request to reset password
 
     Args:
       model (ForgotPasswordRequestModel): The data to be send as ForgotPasswordRequestModel.
@@ -82,7 +67,7 @@ class UserDataSource(RestDataSource):
 
   def change_password(self, model: ChangePasswordRequestModel) -> ChangePasswordResponseModel:
     """
-    Send request to change password
+    Change current password
 
     Args:
       model (ChangePasswordRequestModel): The data to be sand as ChangePasswordRequestModel
@@ -99,7 +84,7 @@ class UserDataSource(RestDataSource):
 
   def set_device_pin(self, model: SetDevicePinRequestModel, key: str = None) -> SetDevicePinResponseModel:
     """
-    Send request to set a new pin
+    Set device pin
 
     Args:
       model (SetDevicePinRequestModel): The data to be send as SetDevicePinRequestModel.
@@ -108,18 +93,13 @@ class UserDataSource(RestDataSource):
     Returns:
       SetDevicePinResponseModel: The response as SetDevicePinResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.SET_DEVICE_PIN, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.SET_DEVICE_PIN, key)
     # convert the request to response model
     return SetDevicePinResponseModel.parse_raw(response_json)
 
   def get_hs_token(self, model: GetHsTokenRequestModel, key: str = None) -> GetHsTokenResponseModel:
     """
-    Send request to get one time hs token
+    Get one time hs token
 
     Args:
       model (GetHsTokenRequestModel): The data to be send as GetHsTokenRequestModel
@@ -128,12 +108,7 @@ class UserDataSource(RestDataSource):
     Returns:
       GetHsTokenResponseModel: The response as GetHsTokenResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_HS_TOKEN, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_HS_TOKEN, key)
     # convert the request to response model
     return GetHsTokenResponseModel.parse_raw(response_json)
 
@@ -164,12 +139,7 @@ class UserDataSource(RestDataSource):
     Returns:
       UserDetailsResponseModel: The response as UserDetailsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.USER_DETAILS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.USER_DETAILS, key)
     # convert the request to response model
     return UserDetailsResponseModel.parse_raw(response_json)
 
@@ -184,12 +154,7 @@ class UserDataSource(RestDataSource):
     Returns:
       ClientDetailsResponseModel: The response as ClientDetailsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.CLIENT_DETAILS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.CLIENT_DETAILS, key)
     # convert the request to response model
     return ClientDetailsResponseModel.parse_raw(response_json)
 
@@ -204,11 +169,6 @@ class UserDataSource(RestDataSource):
     Returns:
       SaveFCMTokenResponseModel: The response as SaveFCMTokenResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.SAVE_FCM_TOKEN, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.SAVE_FCM_TOKEN, key)
     # convert the request to response model
     return SaveFCMTokenResponseModel.parse_raw(response_json)

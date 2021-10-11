@@ -24,9 +24,9 @@ class LogoutResponseModel(BaseModel):
   stat: ResponseStatus
   """The logout success or failure status"""
   request_time: Optional[datetime]
-  """It will be present only on successful logout."""
+  """It will be present only on successful response."""
   emsg: Optional[str]
-  """Error message if the logout failed"""
+  """Error message if the request failed"""
 
   class Config:
     """model configuration"""

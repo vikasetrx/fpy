@@ -1,9 +1,16 @@
 """
 The client combines all the modules and abstracts the inner logic
 """
-from py_client.modules.watchlists.datasource import WatchListDataSource
+
 from .modules.users import LoginRequestModel, LogoutRequestModel
 from .modules.users import UserDataSource
+from .modules.watchlists import WatchListDataSource
+from .modules.orders import OrdersDataSource
+from .modules.markets import MarketsDataSource
+from .modules.alerts import AlertsDataSource
+from .modules.funds import FundsDataSource
+from .modules.holdings_limits import HoldingsLimitsDataSource
+from .modules.holdings_limits import HoldingsRequestModel, LimitsRequestModel
 from .utils.stateful import Stateful
 
 __all__ = ['Client']
@@ -25,6 +32,11 @@ class Client(Stateful):
     self.__setup__()
     self.__users = UserDataSource(base_url, interceptors=self._interceptors, state = self.state)
     self.__watchlists = WatchListDataSource(base_url, interceptors=self._interceptors, state=self.state)
+    self.__orders = OrdersDataSource(base_url, interceptors=self._interceptors, state=self.state)
+    self.__markets = MarketsDataSource(base_url, interceptors=self._interceptors, state=self.state)
+    self.__alerts = AlertsDataSource(base_url, interceptors=self._interceptors, state=self.state)
+    self.__funds = FundsDataSource(base_url, interceptors=self._interceptors, state=self.state)
+    self.__hl = HoldingsLimitsDataSource(base_url, interceptors=self._interceptors, state=self.state)
 
   def __setup__(self) -> None:
     """
@@ -51,9 +63,37 @@ class Client(Stateful):
     """
     return self.__watchlists
 
+  @property
+  def orders(self) -> OrdersDataSource:
+    """
+    The orders module datasource
+    """
+    return self.__orders
+
+  @property
+  def markets(self) -> MarketsDataSource:
+    """
+    The markets module datasource
+    """
+    return self.__markets
+
+  @property
+  def alerts(self) -> AlertsDataSource:
+    """
+    The alerts module datasource
+    """
+    return self.__alerts
+
+  @property
+  def funds(self) -> FundsDataSource:
+    """
+    The funds module datasource
+    """
+    return self.__funds
+
   def login(self, model: LoginRequestModel):
     """
-    Send a login request to rest api. Alias for ```client.users.login```
+    Login user. Alias for ```client.users.login```
 
     Args:
       model (LoginRequestModel): The data to be send as LoginRequestModel instance.
@@ -67,9 +107,9 @@ class Client(Stateful):
       self.set_state('token', response.susertoken)
     return response
 
-  def logout(self, model: LogoutRequestModel, key: str):
+  def logout(self, model: LogoutRequestModel, key: str = None):
     """
-    Send a logout request to rest api. Alias for ```client.users.logout```
+    Logout user. Alias for ```client.users.logout```
 
     Args:
       model (LogoutRequestModel): The data to be send as LogoutRequestModel instance
@@ -79,3 +119,29 @@ class Client(Stateful):
       LogoutResponseModel: The response from logout request as LogoutResponseModel instance
     """
     return self.__users.logout(model, key)
+
+  def holdings(self, model: HoldingsRequestModel, key: str):
+    """
+    Get holdings
+
+    Args:
+      model (HoldingsRequestModel): The data to be send as HoldingsRequestModel.
+      key (str): The key obtained on login success
+    
+    Returns:
+      HoldingsResponseModel: The response as HoldingsResponseModel.
+    """
+    return self.__hl.holdings(model, key)
+
+  def limits(self, model: LimitsRequestModel, key: str = None):
+    """
+    Limits
+
+    Args:
+      model (LimitsRequestModel): The data to be send as LimitsRequestModel.
+      key (str, optional): The key obtained on login success. Uses the token in the state if not passed explicitly.
+
+    Returns:
+      LimitsResponseModel: The response as LimitsResponseModel.
+    """
+    return self.__hl.limits(model, key)

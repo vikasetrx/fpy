@@ -2,9 +2,13 @@
 Example usage of login request
 """
 import uuid
+import os
 from py_client.common.enums import RequestSourceType
 from py_client import LoginRequestModel, HttpException
 from argparse import ArgumentParser
+# load env files
+from dotenv import load_dotenv
+load_dotenv()
 
 from ..base import Example
 

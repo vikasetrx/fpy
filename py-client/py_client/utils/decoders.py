@@ -7,7 +7,7 @@ from dateutil.parser import parse as parse_date
 from datetime import datetime
 from typing import Any, Callable, Dict, Union
 
-def datetime_decoder(**kwargs):
+def datetime_decoder(transform: Callable[[datetime], Any] = None, **kwargs):
   """
   Creates a datetime decoder for a given format.
 
@@ -27,7 +27,8 @@ def datetime_decoder(**kwargs):
     Returns:
       datetime: The datetime instance
     """
-    return parse_date(value, **kwargs)
+    dt = parse_date(value, **kwargs)
+    return dt if transform is None else transform(dt)
   return decode
 
 def timestamp_decoder():

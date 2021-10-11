@@ -24,11 +24,11 @@ class GetHsTokenResponseModel(BaseModel):
   stat: ResponseStatus
   """The logout success or failure status"""
   request_time: Optional[datetime]
-  """It will be present only on successful logout."""
+  """It will be present only on successful response."""
   hstk: Optional[str]
   """One time Token to be sent to BackOffice or third party link"""
   emsg: Optional[str]
-  """Error message if the logout failed"""
+  """Error message if the request failed"""
   class Config:
     """model configuration"""
     json_loads = build_loader({

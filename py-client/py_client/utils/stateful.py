@@ -21,17 +21,19 @@ class Stateful:
     """The current app state"""
     return self.__state__
 
-  def get_state(self, key: str) -> Any:
+  def get_state(self, key: str, override: Any = None, default: Any = None) -> Any:
     """
     Get a value from the state
 
     Args:
       key (str): The name of the state var
+      override (Any): The value to override the recieved value from
+      default (Any): The default value to return if key do not exist
 
     Returns:
       Any: The value
     """
-    return self.state.get(key)
+    return self.state.get(key, default) if override is None else override
 
   def set_state(self, key: str, value: Any):
     """

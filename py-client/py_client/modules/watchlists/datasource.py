@@ -2,24 +2,15 @@
 The data source for all watchlist specific requests
 """
 
-from ...utils.datasources import RestDataSource
+from ...utils.datasources import NorenRestDataSource
 from . import endpoints
 
-from .models.get_names import GetWatchListNamesRequestModel, GetWatchListNamesResponseModel
-from .models.get_watchlist import GetWatchListRequestModel, GetWatchListResponseModel
-from .models.search_scrips import SearchScripsRequestModel, SearchScripsResponseModel
-from .models.add_scrips import AddScripsRequestModel, AddScripsResponseModel
-from .models.delete_scrips import DeleteScripsRequestModel, DeleteScripsResponseModel
-from .models.get_security_info import GetSecurityInfoRequestModel, GetSecurityInfoResponseModel
-from .models.get_quotes import GetQuotesRequestModel, GetQuotesResponseModel
-from .models.get_predefined_watchlists import GetPredefinedWatchListsRequestModel, GetPredefinedWatchListsResponseModel
-from .models.get_predefined_scrips import GetPredefinedScripsRequestModel, GetPredefinedScripsResponseModel
+from .models import *
 
-class WatchListDataSource(RestDataSource):
+class WatchListDataSource(NorenRestDataSource):
   """
   The datasource for all watch list specific requests
   """
-
   def get_names(self, model: GetWatchListNamesRequestModel, key: str = None) -> GetWatchListNamesResponseModel:
     """
     Fetch watchlist names
@@ -31,12 +22,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetWatchListNamesResponseModel: The response as GetWatchListNamesResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_NAMES, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_NAMES, key)
     # convert the request to response model
     return GetWatchListNamesResponseModel.parse_raw(response_json)
 
@@ -51,12 +37,8 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetWatchListResponseModel: The response as GetWatchListResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_WATCHLIST, f"jData={request_json}&jKey={key}")
+    
+    response_json = self._run_request(model, endpoints.GET_WATCHLIST, key)
     # convert the request to response model
     return GetWatchListResponseModel.parse_raw(response_json)
 
@@ -71,12 +53,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       SearchScripsResponseModel: The response as SearchScripsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.SEARCH_SCRIPS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.SEARCH_SCRIPS, key)
     # convert the request to response model
     return SearchScripsResponseModel.parse_raw(response_json)
 
@@ -91,12 +68,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       AddScripsResponseModel: The response as AddScripsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.ADD_SCRIPS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.ADD_SCRIPS, key)
     # convert the request to response model
     return AddScripsResponseModel.parse_raw(response_json)
 
@@ -111,12 +83,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       DeleteScripsResponseModel: The response as DeleteScripsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.DELETE_SCRIPS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.DELETE_SCRIPS, key)
     # convert the request to response model
     return DeleteScripsResponseModel.parse_raw(response_json)
 
@@ -131,12 +98,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetSecurityInfoResponseModel: The response as GetSecurityInfoResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_SECURITY_INFO, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_SECURITY_INFO, key)
     # convert the request to response model
     return GetSecurityInfoResponseModel.parse_raw(response_json)
 
@@ -151,12 +113,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetQuotesResponseModel: The response as GetQuotesResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_QUOTES, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_QUOTES, key)
     # convert the request to response model
     return GetQuotesResponseModel.parse_raw(response_json)
 
@@ -171,12 +128,7 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetPredefinedWatchListsResponseModel: The response as GetPredefinedWatchListsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_PREDEFINED_WATCHLISTS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_PREDEFINED_WATCHLISTS, key)
     # convert the request to response model
     return GetPredefinedWatchListsResponseModel.parse_raw(response_json)
 
@@ -191,11 +143,6 @@ class WatchListDataSource(RestDataSource):
     Returns:
       GetPredefinedScripsResponseModel: The response as GetPredefinedScripsResponseModel.
     """
-    # get key from saved state if not passed explicitly
-    key = self.get_state('token') if key is None else key
-    # convert request model to json string
-    request_json = model.json(exclude_unset=True)
-    # send the post request to get the json response
-    response_json = self.post(endpoints.GET_PREDEFINED_WATCHLISTS, f"jData={request_json}&jKey={key}")
+    response_json = self._run_request(model, endpoints.GET_PREDEFINED_SCRIPS, key)
     # convert the request to response model
     return GetPredefinedScripsResponseModel.parse_raw(response_json)
